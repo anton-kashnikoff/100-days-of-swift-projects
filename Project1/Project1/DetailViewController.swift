@@ -9,14 +9,17 @@ import UIKit
 
 final class DetailViewController: UIViewController {
     // MARK: - IBOutlet
-    @IBOutlet var imageView: UIImageView!
+    
+    @IBOutlet private var imageView: UIImageView!
 
     // MARK: - Public Properties
+    
     var selectedImage: String?
     var selectedPictureNumber = 0
     var totalPictures = 0
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

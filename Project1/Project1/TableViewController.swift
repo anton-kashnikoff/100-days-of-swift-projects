@@ -9,10 +9,12 @@ import UIKit
 
 final class TableViewController: UITableViewController {
     // MARK: - Private Properties
+    
     private var pictures = [String]()
     private var picturesViewsCount = [String: Int]()
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,23 +26,18 @@ final class TableViewController: UITableViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func shareTapped() {
         let activityVC = UIActivityViewController(activityItems: ["Hello! This is great app! Try it now!"], applicationActivities: nil)
         present(activityVC, animated: true)
     }
 
     @objc private func loadImages() {
-        let fm = FileManager.default
-        let path = Bundle.main.resourcePath!
-        let items = try! fm.contentsOfDirectory(atPath: path)
+        let items = try! FileManager.default.contentsOfDirectory(atPath: Bundle.main.resourcePath!)
 
-        for item in items {
-            if item.hasPrefix("nssl") {
-                pictures.append(item)
-            }
-        }
-        
-        pictures.sort()
+        pictures = items
+            .filter { item in item.hasPrefix("nssl") }
+            .sorted()
         
         picturesViewsCount = UserDefaults.standard.object(forKey: "ViewsCount") as? [String: Int] ?? [String: Int]()
 
@@ -51,6 +48,7 @@ final class TableViewController: UITableViewController {
 }
 
 // MARK: - UITableViewController
+
 extension TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         pictures.count
@@ -62,11 +60,11 @@ extension TableViewController {
         if #available(iOS 14.0, *) {
             var content = cell.defaultContentConfiguration()
             content.text = pictures[indexPath.row]
-            content.secondaryText = "Views count: \(picturesViewsCount[pictures[indexPath.row], default: 0])"
+            content.secondaryText = "Views count: \(picturesViewsCount[pictures[indexPath.row], default: .zero])"
             cell.contentConfiguration = content
         } else {
             cell.textLabel?.text = pictures[indexPath.row]
-            cell.detailTextLabel?.text = "Views count: \(picturesViewsCount[pictures[indexPath.row], default: 0])"
+            cell.detailTextLabel?.text = "Views count: \(picturesViewsCount[pictures[indexPath.row], default: .zero])"
         }
 
         return cell
@@ -78,7 +76,7 @@ extension TableViewController {
             detailViewController.selectedPictureNumber = indexPath.row + 1
             detailViewController.totalPictures = pictures.count
             
-            picturesViewsCount[pictures[indexPath.row], default: 0] += 1
+            picturesViewsCount[pictures[indexPath.row], default: .zero] += 1
             
             DispatchQueue.global().async { [weak self] in
                 UserDefaults.standard.set(self?.picturesViewsCount, forKey: "ViewsCount")

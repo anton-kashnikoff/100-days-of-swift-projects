@@ -11,32 +11,40 @@ Each project in this repository is a standalone application developed as part of
 - **Project 1: Storm Viewer**: Build an app to show a list of images and let users tap to view them in a detail view.
 - **Project 2: Guess the Flag**: Create a game to test users on their knowledge of world flags.
 - **Project 3: Social Media**: Build an app that allows users to share images with their friends.
+- **Milestone projects 1-3**:
 - **Project 4: Easy Browser**: Create a simple web browser using WKWebView.
 - **Project 5: Word Scramble**: Build a word game that challenges users to create words from a given set of letters.
-- **Project 6: Auto Layout**: Learn about Auto Layout by building a simple user interface.
+- **Project 6a: Auto Layout**: Improved version of Project 2 - Guess The Flag (support for landscape mode).
+- **Project 6b: These Are Some Awesome Labels**: AutoLayout constraints, VFL and anchors.
+- **Milestone projects 4-6: Shopping List**:
 - **Project 7: Whitehouse Petitions**: Build an app to parse and display data from the Whitehouse petitions API.
-- **Project 8: 7 Swifty Words**: Create a word-guessing game using UIKit.
-- **Project 9: Grand Central Dispatch**: Learn about concurrency by building an app that fetches data from the internet.
+- **Project 8: Swifty Words**: Create a word-guessing game using UIKit.
+- **Project 9: Grand Central Dispatch**: Improved version of Project 7 - Whitehouse Petitions (support for GCD).
+- **Milestone projects 7-9: Hangman Game**:
 - **Project 10: Names to Faces**: Build an app that lets users take photos and attach names to them.
 - **Project 11: Pachinko**: Create a game similar to Pachinko using UIKit and SpriteKit.
-- **Project 12: UserDefaults**: Learn how to save user settings and data using UserDefaults.
+- **Project 12a:**: 
+- **Project 12b:**:
+- **Milestone projects 10-12: My Photos**:
 - **Project 13: Instafilter**: Build an app that lets users apply filters to photos.
-- **Project 14: Whack-a-Penguin**: Create a game where users tap on penguins as they appear.
+- **Project 14: Whack a Penguin**: Create a game where users tap on penguins as they appear.
 - **Project 15: Animation**: Learn about animations in iOS by creating various animated effects.
-- **Project 16: JavaScript Injection**: Build a browser extension that modifies web pages using JavaScript.
-- **Project 17: Swifty Ninja**: Create a game where users swipe to cut objects flying across the screen.
-- **Project 18: Debugging**: Learn about debugging techniques and tools in Xcode.
-- **Project 19: Capital Cities**: Build an app that shows the locations of capital cities on a map.
-- **Project 20: Fireworks Night**: Create a fireworks display using SpriteKit.
-- **Project 21: Local Notifications**: Learn how to schedule and handle local notifications in iOS.
-- **Project 22: Detect-a-Beacon**: Build an app that detects and responds to iBeacons.
-- **Project 23: Space Race**: Create a game where users control a spaceship and avoid obstacles.
-- **Project 24: Swift Strings**: Learn about string manipulation and formatting in Swift.
+- **Milestone projects 13-15: Countries**: An app that contains facts about countries.
+- **Project 16: Capital Cities**: The app shows a map using MapKit and capitals cities in it with extra information about them.
+- **Project 17: Space Race**: The game in which the player must dodge space debris flying towards him.
+- **Project 18: Debugging**: Several different debugging techniques.
+- **Milestone projects 16-18: Duck Shooting**: A game where you need to shoot moving targets (ducks) and earn points.
+- **Project 19: JavaScript Injection**: The extension opens in Safari and prompts the user to write a script for changing current webpage in the input field, which will then be executed.
+- **Project 20: Fireworks Night**: A game in which you need to click on rockets of the same color to make them explode.
+- **Project 21:**: 
+- **Project 22:**: 
+- **Project 23:e**: 
+- **Project 24:**: 
 
 ## How to Use
 
 1. Clone the repository:
-    ```bash
+    ```zsh
     git clone https://github.com/prostokot14/100-days-of-swift.git
     ```
 2. Open the project in Xcode.
@@ -44,4 +52,4 @@ Each project in this repository is a standalone application developed as part of
 
 ## Contact
 
-If you have any questions or suggestions, you can contact me via email: [antonkashnikoff@icloud.com](mailto:antonkashnikoff@icloud.com).
+If you have any questions or suggestions, you can contact me via email: [anton.kashnikoff@icloud.com](mailto:anton.kashnikoff@icloud.com).
