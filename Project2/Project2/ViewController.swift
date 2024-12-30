@@ -5,16 +5,18 @@
 //  Created by Антон Кашников on 22.02.2023.
 //
 
-import UserNotifications
 import UIKit
+import UserNotifications
 
 final class ViewController: UIViewController {
     // MARK: - IBOutlets
+    
     @IBOutlet private var button1: UIButton!
     @IBOutlet private var button2: UIButton!
     @IBOutlet private var button3: UIButton!
 
     // MARK: - Private Properties
+    
     private var countries = [String]()
     private var correctAnswer = 0
     private var score = 0
@@ -47,14 +49,15 @@ final class ViewController: UIViewController {
     }
 
     // MARK: - IBActions
+    
     @IBAction private func buttonTouchedDown(_ sender: UIButton) {
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) {
+        UIView.animate(withDuration: 1, delay: .zero, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) {
             sender.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         }
     }
     
     @IBAction private func buttonTapped(_ sender: UIButton) {
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) {
+        UIView.animate(withDuration: 1, delay: .zero, usingSpringWithDamping: 0.2, initialSpringVelocity: 5) {
             sender.transform = .identity
         }
         
@@ -75,22 +78,18 @@ final class ViewController: UIViewController {
                 highestScore = score
                 UserDefaults.standard.set(highestScore, forKey: "HighestScore")
                 showAlert(title: "Congratulations!", message: "Your new score \(score) beat the previous high score!", buttonTitle: "OK") { [weak self] _ in
-                    guard let self else {
-                        return
-                    }
+                    guard let self else { return }
                     
-                    self.score = 0
-                    self.countOfAnswers = 0
+                    self.score = .zero
+                    self.countOfAnswers = .zero
                     self.askQuestion(action: nil)
                 }
             } else {
                 showAlert(title: "Congratulations!", message: "Your final score is \(score)", buttonTitle: "Continue") { [weak self] _ in
-                    guard let self else {
-                        return
-                    }
+                    guard let self else { return }
                     
-                    self.score = 0
-                    self.countOfAnswers = 0
+                    self.score = .zero
+                    self.countOfAnswers = .zero
                     self.askQuestion(action: nil)
                 }
             }
@@ -102,9 +101,7 @@ final class ViewController: UIViewController {
     // MARK: - Private Methods
     
     private func setNotifications() {
-        let notificationCenter = UNUserNotificationCenter.current()
-        
-        notificationCenter.getNotificationSettings { [weak self] notificationSettings in
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] notificationSettings in
             switch notificationSettings.authorizationStatus {
             case .notDetermined:
                 let alertController = UIAlertController(
@@ -128,9 +125,7 @@ final class ViewController: UIViewController {
     }
     
     private func requestNotificationsAuthorization() {
-        let notificationCenter = UNUserNotificationCenter.current()
-        
-        notificationCenter.requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
             if granted {
                 self?.scheduleNotifications()
             } else {
@@ -188,7 +183,7 @@ final class ViewController: UIViewController {
         title: String, message: String?, buttonTitle: String, action: ((UIAlertAction) -> Void)?
     ) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: action))
+        alertController.addAction(.init(title: buttonTitle, style: .default, handler: action))
         present(alertController, animated: true)
     }
 
