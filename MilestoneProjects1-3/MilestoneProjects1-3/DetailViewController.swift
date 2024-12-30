@@ -9,13 +9,16 @@ import UIKit
 
 final class DetailViewController: UIViewController {
     // MARK: - IBOutlet
-    @IBOutlet var flagImageView: UIImageView!
+    
+    @IBOutlet private var flagImageView: UIImageView!
 
     // MARK: - Public Properties
+    
     var flagImage: UIImage?
     var countryName: String?
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,10 +32,9 @@ final class DetailViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func didTapShareButton() {
-        guard let flagImage = flagImageView.image else {
-            return
-        }
+        guard let flagImage = flagImageView.image else { return }
 
         let activityVC = UIActivityViewController(activityItems: [title ?? "Unknown country", flagImage], applicationActivities: nil)
 

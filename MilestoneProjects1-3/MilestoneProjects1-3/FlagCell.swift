@@ -9,6 +9,7 @@ import UIKit
 
 final class FlagCell: UITableViewCell {
     // MARK: - IBOutlet
+    
     @IBOutlet var flagImageView: UIImageView!
     @IBOutlet var countryNameLabel: UILabel!
 }
