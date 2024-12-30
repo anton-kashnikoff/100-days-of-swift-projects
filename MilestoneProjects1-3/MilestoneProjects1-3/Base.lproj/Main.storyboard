@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fM8-4o-e1u">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Table View Controller-->
+        <scene sceneID="wDh-x3-UaH">
+            <objects>
+                <tableViewController id="dqD-t5-g4K" customClass="TableViewController" customModule="MilestoneProjects1_3" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="QPw-Oz-zoN">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Flag" rowHeight="97" id="dqR-fa-dC9" userLabel="Flag Cell" customClass="FlagCell" customModule="MilestoneProjects1_3" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="393" height="97"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dqR-fa-dC9" id="P5D-Ka-A4f">
+                                    <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="97"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag_france.png" translatesAutoresizingMaskIntoConstraints="NO" id="X08-nH-Fs6" userLabel="Flag Image View">
+                                            <rect key="frame" x="10" y="10" width="120" height="77"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="60" id="96X-fo-qnG"/>
+                                                <constraint firstAttribute="width" constant="120" id="SXS-YY-Mkv"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="France" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tAA-Wy-e7m" userLabel="Country Name Label">
+                                            <rect key="frame" x="140" y="38" width="204.66666666666663" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="tAA-Wy-e7m" firstAttribute="centerY" secondItem="X08-nH-Fs6" secondAttribute="centerY" id="2Qr-3j-ctr"/>
+                                        <constraint firstItem="tAA-Wy-e7m" firstAttribute="leading" secondItem="X08-nH-Fs6" secondAttribute="trailing" constant="10" id="5UD-yI-pq1"/>
+                                        <constraint firstAttribute="bottom" secondItem="X08-nH-Fs6" secondAttribute="bottom" constant="10" id="E5U-oO-SYI"/>
+                                        <constraint firstItem="X08-nH-Fs6" firstAttribute="top" secondItem="P5D-Ka-A4f" secondAttribute="top" constant="10" id="cKA-jS-Nqd"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="tAA-Wy-e7m" secondAttribute="trailing" constant="10" id="s71-r4-7hZ"/>
+                                        <constraint firstItem="X08-nH-Fs6" firstAttribute="leading" secondItem="P5D-Ka-A4f" secondAttribute="leading" constant="10" id="wGG-lL-cUW"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="countryNameLabel" destination="tAA-Wy-e7m" id="b2U-ew-dmk"/>
+                                    <outlet property="flagImageView" destination="X08-nH-Fs6" id="1nc-5S-aPj"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="dqD-t5-g4K" id="OE8-5z-8il"/>
+                            <outlet property="delegate" destination="dqD-t5-g4K" id="d9P-yw-nxR"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="zhw-ZX-sTe"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xO7-h0-eMe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="780.91603053435108" y="12.67605633802817"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="hx2-Ry-abJ">
+            <objects>
+                <viewController storyboardIdentifier="DetailViewController" id="EPZ-g1-t4T" customClass="DetailViewController" customModule="MilestoneProjects1_3" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="afd-Vc-jxe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag_france.png" translatesAutoresizingMaskIntoConstraints="NO" id="7U6-bK-k3N">
+                                <rect key="frame" x="0.0" y="326" width="393" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Aey-rR-Gij"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="HdP-TR-FJA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="7U6-bK-k3N" firstAttribute="leading" secondItem="HdP-TR-FJA" secondAttribute="leading" id="SXB-rh-xil"/>
+                            <constraint firstItem="HdP-TR-FJA" firstAttribute="trailing" secondItem="7U6-bK-k3N" secondAttribute="trailing" id="XE6-Z1-c65"/>
+                            <constraint firstItem="7U6-bK-k3N" firstAttribute="centerY" secondItem="afd-Vc-jxe" secondAttribute="centerY" id="akp-By-bAj"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="flagImageView" destination="7U6-bK-k3N" id="Gng-9z-Nd6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ejv-mt-41Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1648" y="13"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="GND-0p-Bcz">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fM8-4o-e1u" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="XTK-t1-rBi">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="dqD-t5-g4K" kind="relationship" relationship="rootViewController" id="UcV-qG-UPM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i9X-Ok-5l1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-145.80152671755724" y="12.67605633802817"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="flag_france.png" width="200" height="100"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
