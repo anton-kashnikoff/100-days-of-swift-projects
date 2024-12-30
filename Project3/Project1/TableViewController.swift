@@ -9,9 +9,11 @@ import UIKit
 
 final class TableViewController: UITableViewController {
     // MARK: - Private Properties
+    
     private var pictures = [String]()
     
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,23 +25,18 @@ final class TableViewController: UITableViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func shareTapped() {
         let activityVC = UIActivityViewController(activityItems: ["Hello! This is great app! Try it now!"], applicationActivities: nil)
         present(activityVC, animated: true)
     }
 
     @objc private func loadImages() {
-        let fm = FileManager.default
-        let path = Bundle.main.resourcePath!
-        let items = try! fm.contentsOfDirectory(atPath: path)
-
-        for item in items {
-            if item.hasPrefix("nssl") {
-                pictures.append(item)
-            }
-        }
+        let items = try! FileManager.default.contentsOfDirectory(atPath: Bundle.main.resourcePath!)
         
-        pictures.sort()
+        pictures = items
+            .filter { item in item.hasPrefix("nssl") }
+            .sorted()
 
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
@@ -48,6 +45,7 @@ final class TableViewController: UITableViewController {
 }
 
 // MARK: - UITableViewController
+
 extension TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         pictures.count
@@ -63,6 +61,7 @@ extension TableViewController {
         } else {
             cell.textLabel?.text = pictures[indexPath.row]
         }
+
         return cell
     }
     

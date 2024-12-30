@@ -9,14 +9,17 @@ import UIKit
 
 final class DetailViewController: UIViewController {
     // MARK: - IBOutlet
+    
     @IBOutlet private var imageView: UIImageView!
 
     // MARK: - Public Properties
+    
     var selectedImage: String?
     var selectedPictureNumber = 0
     var totalPictures = 0
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,7 +28,7 @@ final class DetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         if let imageToLoad = selectedImage {
-            imageView.image = UIImage(named: imageToLoad)
+            imageView.image = .init(named: imageToLoad)
         }
     }
     
@@ -42,6 +45,7 @@ final class DetailViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func shareTapped() {
         guard let image = imageView.image?.jpegData(compressionQuality: 0.8) else {
             print("No image found")
