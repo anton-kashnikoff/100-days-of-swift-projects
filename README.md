@@ -1,6 +1,6 @@
 # 100 Days of Swift
 
-This repository contains mini-projects that I create following tutorials from the website [hackingwithswift.com](https://www.hackingwithswift.com).
+This repository contains mini-projects that I create following tutorials from the [hackingwithswift.com](https://www.hackingwithswift.com).
 
 ## Description
 
@@ -8,9 +8,9 @@ Each project in this repository is a standalone application developed as part of
 
 ## Repository Structure
 
-- **Project 1: Storm Viewer**: Build an app to show a list of images and let users tap to view them in a detail view.
-- **Project 2: Guess the Flag**: Create a game to test users on their knowledge of world flags.
-- **Project 3: Social Media**: Build an app that allows users to share images with their friends.
+- **Project 1: Storm Viewer**: An app to show a list of images and let users tap to view them in a detail view.
+- **Project 2: Guess the Flag**: A game to test users on their knowledge of world flags.
+- **Project 3: Storm Viewer (with image sharing)**: An app to show a list of images and let users tap to view them in a detail view and share them.
 - **Milestone projects 1-3**:
 - **Project 4: Easy Browser**: Create a simple web browser using WKWebView.
 - **Project 5: Word Scramble**: Build a word game that challenges users to create words from a given set of letters.
