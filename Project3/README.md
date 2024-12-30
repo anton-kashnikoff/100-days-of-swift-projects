@@ -1,4 +1,4 @@
-# Storm Viewer (with iamge sharing)
+# Storm Viewer (with image sharing)
 The application is made for training skills in working with UIActivityViewController.
 
 <img src="https://github.com/user-attachments/assets/756ae40d-55aa-40c0-9c2f-ebf0858b26c8" width="200">
