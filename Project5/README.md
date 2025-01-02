@@ -1,8 +1,8 @@
 # Word Scramble
 The application is made for training skills in working with UITextChecker.
 
-<img src="https://github.com/user-attachments/assets/b9a5abf2-dc76-40a7-8fd1-b13b3e47440c" width="200">
-<img src="https://github.com/user-attachments/assets/c702bf14-6a93-429e-a2f8-b2f392b3e685" width="200">
+<img src="https://github.com/user-attachments/assets/82ba7009-4b18-453a-95aa-e05347a97006" width="200">
+<img src="https://github.com/user-attachments/assets/689b2b9d-10a7-4987-9f44-7a27d910e79d" width="200">
 
 ## Description
 The simple word game that deals with anagrams.
