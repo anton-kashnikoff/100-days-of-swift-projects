@@ -1,10 +1,11 @@
-# Country flags
+# Shopping List
 The application is made for training skills in working with UIKit.
 
-<img src="https://github.com/user-attachments/assets/63302aa8-3218-4f24-bfba-6708de7da516" width="200">
-<img src="https://github.com/user-attachments/assets/95df300f-53a8-4c8d-b0a2-1b4f04458767" width="200">
+<img src="https://github.com/user-attachments/assets/0e6ee6f4-642a-4a24-bf09-bc96d3616b44" width="200">
+<img src="https://github.com/user-attachments/assets/852385cc-cf63-4c28-a317-9dfd5d3c8876" width="200">
 
 ## Description
+
 The app that lets people create a shopping list by adding items to a table view.
 ## System requirements
 * Swift 5.9
