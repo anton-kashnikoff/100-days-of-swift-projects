@@ -9,10 +9,12 @@ import UIKit
 
 final class TableViewController: UITableViewController {
     // MARK: - Private properties
+    
     private var allWords = [String]()
     private var gameState = GameState(currentWord: "", usedWords: [])
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,6 +33,7 @@ final class TableViewController: UITableViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func startGame() {
         if let loadedState = UserDefaults.standard.object(forKey: "GameState") as? Data, let decodedState = try?  JSONDecoder().decode(GameState.self, from: loadedState) {
             self.gameState = decodedState
@@ -63,7 +66,7 @@ final class TableViewController: UITableViewController {
         alertController.addTextField()
 
         let submitAlertAction = UIAlertAction(title: "Submit", style: .default) { [weak self, weak alertController] _ in
-            guard let answer = alertController?.textFields?[0].text else {
+            guard let answer = alertController?.textFields?.first?.text else {
                 return
             }
             self?.submit(answer)
@@ -85,12 +88,12 @@ final class TableViewController: UITableViewController {
         if isPossible(word: lowerAnswer) {
             if isOriginal(word: lowerAnswer) {
                 if isReal(word: lowerAnswer) {
-                    gameState.usedWords.insert(lowerAnswer, at: 0)
+                    gameState.usedWords.insert(lowerAnswer, at: .zero)
 
 //                    performSelector(inBackground: #selector(saveGameState), with: nil)
                     saveGameState()
                     
-                    let indexPath = IndexPath(row: 0, section: 0)
+                    let indexPath = IndexPath(row: .zero, section: .zero)
                     tableView.insertRows(at: [indexPath], with: .automatic)
                 } else {
                     showErrorMessage(title: "Word not recognised", message: "You can't just make them up, you know!")
@@ -148,6 +151,7 @@ final class TableViewController: UITableViewController {
 }
 
 // MARK: - UITableViewController
+
 extension TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         gameState.usedWords.count
