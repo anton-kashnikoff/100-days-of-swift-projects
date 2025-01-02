@@ -14,8 +14,8 @@ Each project in this repository is a standalone application developed as part of
 - **Milestone projects 1-3**: An app that lists various world flags in a table view and let users tap to view them in a detail view and share them.
 - **Project 4: Easy Browser**: Create a simple web browser using WKWebView.
 - **Project 5: Word Scramble**: Build a word game that challenges users to create words from a given set of letters.
-- **Project 6a: Auto Layout**: Improved version of Project 2 - Guess The Flag (support for landscape mode).
-- **Project 6b: These Are Some Awesome Labels**: AutoLayout constraints, VFL and anchors.
+- **Project 6a: Guess the Flag (with AutoLayout fixes)**: Improved version of Project 2 - Guess The Flag (support for landscape mode).
+- **Project 6b: AutoLayout views**: AutoLayout constraints, VFL and anchors.
 - **Milestone projects 4-6: Shopping List**: The app that lets people create a shopping list by adding items to a table view.
 - **Project 7: Whitehouse Petitions**: Build an app to parse and display data from the Whitehouse petitions API.
 - **Project 8: Swifty Words**: Create a word-guessing game using UIKit.
