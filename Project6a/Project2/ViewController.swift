@@ -9,11 +9,13 @@ import UIKit
 
 final class ViewController: UIViewController {
     // MARK: - IBOutlet
-    @IBOutlet var button1: UIButton!
-    @IBOutlet var button2: UIButton!
-    @IBOutlet var button3: UIButton!
+    
+    @IBOutlet private var button1: UIButton!
+    @IBOutlet private var button2: UIButton!
+    @IBOutlet private var button3: UIButton!
 
     // MARK: - Private Properties
+    
     private var countries = [String]()
     private var correctAnswer = 0
     private var score = 0
@@ -39,6 +41,7 @@ final class ViewController: UIViewController {
     }
 
     // MARK: - IBAction
+    
     @IBAction func buttonTapped(_ sender: UIButton) {
         var title: String
 
@@ -54,26 +57,27 @@ final class ViewController: UIViewController {
         
         if countOfAnswers == 10 {
             let ac = UIAlertController(title: "Congratulations!", message: "Your final score is \(score)", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Continue", style: .default) { action in
-                self.score = 0
-                self.countOfAnswers = 0
+            ac.addAction(.init(title: "Continue", style: .default) { action in
+                self.score = .zero
+                self.countOfAnswers = .zero
                 self.askQuestion(action: nil)
             })
             present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            ac.addAction(.init(title: "Continue", style: .default, handler: askQuestion))
             present(ac, animated: true)
         }
     }
 
     // MARK: - Private Methods
+    
     private func askQuestion(action: UIAlertAction!) {
         countries.shuffle()
         
-        button1.setImage(UIImage(named: countries[0]), for: .normal)
-        button2.setImage(UIImage(named: countries[1]), for: .normal)
-        button3.setImage(UIImage(named: countries[2]), for: .normal)
+        button1.setImage(.init(named: countries[0]), for: .normal)
+        button2.setImage(.init(named: countries[1]), for: .normal)
+        button3.setImage(.init(named: countries[2]), for: .normal)
         
         correctAnswer = Int.random(in: 0...2)
         title = countries[correctAnswer].uppercased() + " Score: \(score)"
@@ -81,7 +85,7 @@ final class ViewController: UIViewController {
     
     @objc private func showScore() {
         let alertVC = UIAlertController(title: "Your score is \(score)", message: nil, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: "OK", style: .default))
+        alertVC.addAction(.init(title: "OK", style: .default))
         present(alertVC, animated: true)
     }
 }
