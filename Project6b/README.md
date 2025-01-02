@@ -1,8 +1,8 @@
 # AutoLayout views
 The application is made for training skills in working with AutoLayout and VFL.
 
-<img src="https://github.com/user-attachments/assets/e3ee06b1-d927-416b-874f-d49b61bf3ec3" width="200">
-<img src="https://github.com/user-attachments/assets/fb8211dd-e595-4591-b248-2a2c330a8c01" width="200">
+<img src="https://github.com/user-attachments/assets/4347f0e3-5eff-4cad-bb3d-9a62665063b9" width="200">
+<img src="https://github.com/user-attachments/assets/36c87b19-f729-4817-a8de-f107e0d99ebf" width="400">
 
 ## Description
 The simple application with some views created by hand and positioned using Auto Layout.
