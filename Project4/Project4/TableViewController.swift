@@ -8,10 +8,13 @@
 import UIKit
 
 final class TableViewController: UITableViewController {
+    
     // MARK: - Private Properties
+    
     private var websites = ["kodeco.com", "hackingwithswift.com"]
 
     // MARK: - UIViewController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,6 +24,7 @@ final class TableViewController: UITableViewController {
 }
 
 // MARK: - UITableViewController
+
 extension TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         websites.count
