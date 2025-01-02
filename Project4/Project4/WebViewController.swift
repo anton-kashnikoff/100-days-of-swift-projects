@@ -5,11 +5,12 @@
 //  Created by Антон Кашников on 23.05.2023.
 //
 
-import WebKit
+@preconcurrency import WebKit
 
 final class WebViewController: UIViewController {
     
     // MARK: - Private Properties
+    
     private var webView: WKWebView!
     private var progressView: UIProgressView!
 
