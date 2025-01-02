@@ -9,6 +9,7 @@ import UIKit
 
 final class TableViewController: UITableViewController {
     // MARK: - Private Properties
+    
     private var shoppingList = [String]()
 
     // MARK: - UIViewController
@@ -19,22 +20,21 @@ final class TableViewController: UITableViewController {
     }
 
     // MARK: - Private Methods
+    
     @objc private func promptForItem() {
         let alertController = UIAlertController(title: "Enter an item", message: nil, preferredStyle: .alert)
         alertController.addTextField()
         
         let submitAlertAction = UIAlertAction(title: "Add", style: .default) { [weak self, weak alertController] _ in
-            guard let item = alertController?.textFields?[0].text else {
+            guard let item = alertController?.textFields?.first?.text else {
                 return
             }
             
             self?.submit(item)
         }
 
-        let cancelAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
-        
         alertController.addAction(submitAlertAction)
-        alertController.addAction(cancelAlertAction)
+        alertController.addAction(.init(title: "Cancel", style: .cancel))
         present(alertController, animated: true)
     }
     
@@ -49,8 +49,8 @@ final class TableViewController: UITableViewController {
     }
     
     private func submit(_ item: String) {
-        shoppingList.insert(item, at: 0)
-        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+        shoppingList.insert(item, at: .zero)
+        tableView.insertRows(at: [.init(row: .zero, section: .zero)], with: .automatic)
     }
     
     private func addNavigationBar() {
@@ -66,6 +66,7 @@ final class TableViewController: UITableViewController {
 }
 
 // MARK: - UITableViewController
+
 extension TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         shoppingList.count
