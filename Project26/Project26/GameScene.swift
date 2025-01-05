@@ -12,8 +12,16 @@ final class GameScene: SKScene {
     // MARK: - Private Properties
 
     private var player: SKSpriteNode!
+    private var scoreLabel: SKLabelNode!
     private var motionManager: CMMotionManager!
     private var lastTouchPosition: CGPoint?
+    private var isGameOver = false
+
+    private var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
 
     // MARK: - SKScene
 
@@ -24,6 +32,14 @@ final class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
 
+        scoreLabel = .init(fontNamed: "Chalkduster")
+        scoreLabel.text = "Score: 0"
+        scoreLabel.horizontalAlignmentMode = .left
+        scoreLabel.position = .init(x: 16, y: 16)
+        scoreLabel.zPosition = 2
+        addChild(scoreLabel)
+
+        physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
 
         loadLevel()
@@ -34,6 +50,8 @@ final class GameScene: SKScene {
     }
 
     override func update(_ currentTime: TimeInterval) {
+        guard !isGameOver else { return }
+
         #if targetEnvironment(simulator)
             if let currentTouch = lastTouchPosition {
                 let diff = CGPoint(x: currentTouch.x - player.position.x, y: currentTouch.y - player.position.y)
@@ -143,5 +161,43 @@ final class GameScene: SKScene {
         player.physicsBody?.contactTestBitMask = CollisionTypes.star.rawValue | CollisionTypes.vortex.rawValue | CollisionTypes.finish.rawValue
         player.physicsBody?.collisionBitMask = CollisionTypes.wall.rawValue
         addChild(player)
+    }
+
+    private func playerCollided(with node: SKNode) {
+        if node.name == "vortex" {
+            player.physicsBody?.isDynamic = false
+            isGameOver = true
+            score -= 1
+
+            player.run(
+                .sequence([
+                    .move(to: node.position, duration: 0.25),
+                    .scale(to: 0.0001, duration: 0.25),
+                    .removeFromParent()
+                ])
+            ) { [weak self] in
+                self?.createPlayer()
+                self?.isGameOver = false
+            }
+        } else if node.name == "star" {
+            node.removeFromParent()
+            score += 1
+        } else if node.name == "finish" {
+            // next level
+        }
+    }
+}
+
+// MARK: - SKPhysicsContactDelegate
+
+extension GameScene: SKPhysicsContactDelegate {
+    func didBegin(_ contact: SKPhysicsContact) {
+        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else { return }
+        
+        if nodeA == player {
+            playerCollided(with: nodeB)
+        } else if nodeB == player {
+            playerCollided(with: nodeA)
+        }
     }
 }
