@@ -5,9 +5,18 @@
 //  Created by Антон Кашников on 02/01/2025.
 //
 
+import CoreMotion
 import SpriteKit
 
 final class GameScene: SKScene {
+    // MARK: - Private Properties
+
+    private var player: SKSpriteNode!
+    private var motionManager: CMMotionManager!
+    private var lastTouchPosition: CGPoint?
+
+    // MARK: - SKScene
+
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "background.jpg")
         background.position = .init(x: 512, y: 384)
@@ -15,8 +24,45 @@ final class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
 
+        physicsWorld.gravity = .zero
+
         loadLevel()
+        createPlayer()
+
+        motionManager = .init()
+        motionManager.startAccelerometerUpdates()
     }
+
+    override func update(_ currentTime: TimeInterval) {
+        #if targetEnvironment(simulator)
+            if let currentTouch = lastTouchPosition {
+                let diff = CGPoint(x: currentTouch.x - player.position.x, y: currentTouch.y - player.position.y)
+                physicsWorld.gravity = .init(dx: diff.x / 100, dy: diff.y / 100)
+            }
+        #else
+            if let accelerometerData = motionManager.accelerometerData {
+                physicsWorld.gravity = .init(dx: accelerometerData.acceleration.y * -50, dy: accelerometerData.acceleration.x * 50)
+            }
+        #endif
+    }
+
+    // MARK: - UIResponder
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        lastTouchPosition = touch.location(in: self)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        lastTouchPosition = touch.location(in: self)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        lastTouchPosition = nil
+    }
+    
+    // MARK: - Private Methods
 
     private func loadLevel() {
         guard let levelURL = Bundle.main.url(forResource: "level1", withExtension: "txt") else {
@@ -84,5 +130,18 @@ final class GameScene: SKScene {
                 }
             }
         }
+    }
+
+    private func createPlayer() {
+        player = .init(imageNamed: "player")
+        player.position = .init(x: 96, y: 672)
+        player.zPosition = 1
+        player.physicsBody = .init(circleOfRadius: player.size.width / 2)
+        player.physicsBody?.allowsRotation = false
+        player.physicsBody?.linearDamping = 0.5 // applies a lot of friction to its movement
+        player.physicsBody?.categoryBitMask = CollisionTypes.player.rawValue
+        player.physicsBody?.contactTestBitMask = CollisionTypes.star.rawValue | CollisionTypes.vortex.rawValue | CollisionTypes.finish.rawValue
+        player.physicsBody?.collisionBitMask = CollisionTypes.wall.rawValue
+        addChild(player)
     }
 }
