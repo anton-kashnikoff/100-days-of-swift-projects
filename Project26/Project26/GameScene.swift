@@ -10,12 +10,25 @@ import SpriteKit
 
 final class GameScene: SKScene {
     // MARK: - Private Properties
+    
+    private let maxLevel = 7
 
     private var player: SKSpriteNode!
     private var scoreLabel: SKLabelNode!
+    private var restartGameLabel: SKLabelNode!
+    private var restartLevelLabel: SKLabelNode!
+    private var nextLevelLabel: SKLabelNode!
+    private var currentLevelLabel: SKLabelNode!
+    private var finishNode: SKSpriteNode!
     private var motionManager: CMMotionManager!
     private var lastTouchPosition: CGPoint?
     private var isGameOver = false
+    
+    private var currentLevel = 1 {
+        didSet {
+            currentLevelLabel.text = "Level: \(currentLevel)"
+        }
+    }
 
     private var score = 0 {
         didSet {
@@ -39,11 +52,20 @@ final class GameScene: SKScene {
         scoreLabel.zPosition = 2
         addChild(scoreLabel)
 
+        currentLevelLabel = .init(fontNamed: "Chalkduster")
+        currentLevelLabel.text = "Level: \(currentLevel)"
+        currentLevelLabel.horizontalAlignmentMode = .left
+        currentLevelLabel.position = .init(x: 16, y: 730)
+        currentLevelLabel.zPosition = 2
+        currentLevelLabel.name = "currentLevel"
+        addChild(currentLevelLabel)
+
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = .zero
 
         loadLevel()
         createPlayer()
+        createFinishLabels()
 
         motionManager = .init()
         motionManager.startAccelerometerUpdates()
@@ -68,7 +90,32 @@ final class GameScene: SKScene {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-        lastTouchPosition = touch.location(in: self)
+        let location = touch.location(in: self)
+        lastTouchPosition = location
+
+        nodes(at: location).forEach { node in
+            switch node.name {
+            case "nextLevel":
+                currentLevel += 1
+                if currentLevel >= maxLevel {
+                    currentLevel = 1
+                }
+                restart()
+            case "restartLevel":
+                restart()
+            case "restartGame":
+                score = .zero
+                currentLevel = 1
+                restart()
+            case "currentLevel":
+                player.removeAllActions()
+                player.physicsBody?.isDynamic = false
+                addChild(nextLevelLabel)
+                addChild(restartLevelLabel)
+                addChild(restartGameLabel)
+            default: break
+            }
+        }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -83,12 +130,14 @@ final class GameScene: SKScene {
     // MARK: - Private Methods
 
     private func loadLevel() {
-        guard let levelURL = Bundle.main.url(forResource: "level1", withExtension: "txt") else {
-            fatalError("Could not find level1.txt in the app bundle.")
+        let name = "level\(currentLevel)"
+
+        guard let levelURL = Bundle.main.url(forResource: name, withExtension: "txt") else {
+            fatalError("Could not find \(name).txt in the app bundle.")
         }
 
         guard let levelString = try? String(contentsOf: levelURL) else {
-            fatalError("Could not load level1.txt from the app bundle.")
+            fatalError("Could not load \(name).txt from the app bundle.")
         }
 
         let lines = levelString.components(separatedBy: .newlines)
@@ -99,6 +148,25 @@ final class GameScene: SKScene {
                 addElement(with: letter, to: position)
             }
         }
+    }
+
+    private func destroyLevel() {
+        children.forEach { node in
+            if ["wall", "vortex", "star", "finish", "portal"].contains(node.name) {
+                node.removeFromParent()
+            }
+        }
+        player.removeFromParent()
+    }
+
+    private func restart() {
+        [finishNode, nextLevelLabel, restartLevelLabel, restartGameLabel].forEach {
+            $0?.removeFromParent()
+        }
+        destroyLevel()
+        loadLevel()
+        createPlayer()
+        isGameOver = false
     }
 
     private func addElement(with letter: Character, to position: CGPoint) {
@@ -178,6 +246,36 @@ final class GameScene: SKScene {
         addChild(player)
     }
 
+    func createFinishLabels() {
+        finishNode = .init(imageNamed: "finish")
+        finishNode.position = .init(x: 512, y: 544)
+        finishNode.zPosition = 2
+
+        nextLevelLabel = .init(fontNamed: "Chalkduster")
+        nextLevelLabel.text = "Next Level"
+        nextLevelLabel.fontSize = 48
+        nextLevelLabel.name = "nextLevel"
+        nextLevelLabel.horizontalAlignmentMode = .center
+        nextLevelLabel.position = .init(x: 512, y: 454)
+        nextLevelLabel.zPosition = 2
+        
+        restartLevelLabel = .init(fontNamed: "Chalkduster")
+        restartLevelLabel.text = "Restart Level"
+        restartLevelLabel.fontSize = 48
+        restartLevelLabel.name = "restartLevel"
+        restartLevelLabel.horizontalAlignmentMode = .center
+        restartLevelLabel.position = .init(x: 512, y: 384)
+        restartLevelLabel.zPosition = 2
+        
+        restartGameLabel = .init(fontNamed: "Chalkduster")
+        restartGameLabel.text = "Restart Game"
+        restartGameLabel.fontSize = 48
+        restartGameLabel.name = "restartGame"
+        restartGameLabel.horizontalAlignmentMode = .center
+        restartGameLabel.position = .init(x: 512, y: 314)
+        restartGameLabel.zPosition = 2
+    }
+
     private func playerCollided(with node: SKNode) {
         if node.name == "vortex" {
             player.physicsBody?.isDynamic = false
@@ -198,7 +296,10 @@ final class GameScene: SKScene {
             node.removeFromParent()
             score += 1
         } else if node.name == "finish" {
-            // next level
+            player.physicsBody?.isDynamic = false
+            [finishNode, nextLevelLabel, restartLevelLabel, restartGameLabel].forEach {
+                addChild($0)
+            }
         }
     }
 }
