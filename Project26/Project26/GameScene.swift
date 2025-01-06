@@ -22,7 +22,9 @@ final class GameScene: SKScene {
     private var finishNode: SKSpriteNode!
     private var motionManager: CMMotionManager!
     private var lastTouchPosition: CGPoint?
+
     private var isGameOver = false
+    private var portalActive = true
     
     private var currentLevel = 1 {
         didSet {
@@ -179,6 +181,8 @@ final class GameScene: SKScene {
             addStar(to: position)
         case "f":
             addFinish(to: position)
+        case "p":
+            addPortal(to: position)
         case " ":
             // this is an empty space – do nothing!
             break
@@ -231,6 +235,27 @@ final class GameScene: SKScene {
         finishNode.physicsBody?.collisionBitMask = .zero
         finishNode.position = position
         addChild(finishNode)
+    }
+
+    private func addPortal(to position: CGPoint) {
+        let portalNode = SKSpriteNode(imageNamed: "portal")
+        portalNode.name = "portal"
+        portalNode.position = position
+
+        let scaleAction = SKAction.scale(by: 1.07, duration: 1.5)
+        portalNode.run(
+            .repeatForever(
+                .sequence([scaleAction, scaleAction.reversed()])
+            )
+        )
+        portalNode.run(.repeatForever(.rotate(byAngle: -.pi, duration: 6)))
+
+        portalNode.physicsBody = .init(circleOfRadius: portalNode.size.width / 2)
+        portalNode.physicsBody?.isDynamic = false
+        portalNode.physicsBody?.categoryBitMask = CollisionTypes.portal.rawValue
+        portalNode.physicsBody?.contactTestBitMask = CollisionTypes.player.rawValue
+        portalNode.physicsBody?.collisionBitMask = .zero
+        addChild(portalNode)
     }
 
     private func createPlayer() {
@@ -292,6 +317,15 @@ final class GameScene: SKScene {
                 self?.createPlayer()
                 self?.isGameOver = false
             }
+        }
+
+        if node.name == "portal" && portalActive {
+            for currentNode in children {
+                if currentNode.name == "portal" && currentNode != node {
+                    enterPortalAction(portalIn: node, portalOut: currentNode)
+                    break
+                }
+            }
         } else if node.name == "star" {
             node.removeFromParent()
             score += 1
@@ -301,6 +335,60 @@ final class GameScene: SKScene {
                 addChild($0)
             }
         }
+        
+        // if the player went to a different collision directly after a portal, didEnd won't be called
+        if !portalActive && node.name != "portal" {
+            portalActive = true
+        }
+    }
+
+    private func playerEndedCollision(with node: SKNode) {
+        guard node.name == "portal" else { return }
+
+        portalActive = true
+    }
+
+    private func enterPortalAction(portalIn: SKNode, portalOut: SKNode) {
+        player.physicsBody?.isDynamic = false
+
+        player.run(
+            .sequence(
+                .init(
+                    repeating: .rotate(byAngle: -.pi, duration: 0.1),
+                    count: 5
+                )
+            )
+        )
+
+        player.run(
+            .sequence([
+                .move(to: portalIn.position, duration: 0.25),
+                .fadeOut(withDuration: 0.25),
+                .removeFromParent()
+            ])
+        ) { [weak self, weak portalOut] in
+            if let portalOut {
+                self?.exitPortalAction(portalOut: portalOut)
+            }
+        }
+    }
+
+    private func exitPortalAction(portalOut: SKNode) {
+        createPlayer()
+
+        player.alpha = .zero
+        player.position = portalOut.position
+        player.run(
+            .sequence(
+                .init(
+                    repeating: .rotate(byAngle: -.pi, duration: 0.05),
+                    count: 5
+                )
+            )
+        )
+        player.run(.fadeIn(withDuration: 0.25))
+
+        portalActive = false
     }
 }
 
@@ -314,6 +402,16 @@ extension GameScene: SKPhysicsContactDelegate {
             playerCollided(with: nodeB)
         } else if nodeB == player {
             playerCollided(with: nodeA)
+        }
+    }
+
+    func didEnd(_ contact: SKPhysicsContact) {
+        guard let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node else { return }
+
+        if nodeA == player {
+            playerEndedCollision(with: nodeB)
+        } else if nodeB == player {
+            playerEndedCollision(with: nodeA)
         }
     }
 }

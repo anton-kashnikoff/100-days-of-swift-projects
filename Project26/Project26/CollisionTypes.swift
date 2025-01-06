@@ -11,4 +11,5 @@ enum CollisionTypes: UInt32 {
     case star = 4
     case vortex = 8
     case finish = 16
+    case portal = 32
 }
