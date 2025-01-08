@@ -27,6 +27,8 @@ final class ViewController: UIViewController {
         
         switch currentDrawType {
         case 0: drawRectangle()
+        case 1: drawCircle()
+        case 2: drawCheckerboard()
         default: break
         }
     }
@@ -45,6 +47,52 @@ final class ViewController: UIViewController {
             )
 
             context.cgContext.drawPath(using: .fillStroke)
+        }
+        
+        imageView.image = image
+    }
+
+    private func drawCircle() {
+        let imageRenderer = UIGraphicsImageRenderer(
+            size: .init(width: 512, height: 512)
+        )
+
+        let lineWidth: CGFloat = 10
+
+        let image = imageRenderer.image { context in
+            context.cgContext.setFillColor(UIColor.red.cgColor)
+            context.cgContext.setStrokeColor(UIColor.black.cgColor)
+            context.cgContext.setLineWidth(lineWidth)
+            context.cgContext.addEllipse(
+                in: .init(
+                    origin: .zero, size: .init(width: 512, height: 512)
+                )
+                .insetBy(dx: lineWidth / 2, dy: lineWidth / 2)
+            )
+
+            context.cgContext.drawPath(using: .fillStroke)
+        }
+        
+        imageView.image = image
+    }
+
+    private func drawCheckerboard() {
+        let imageRenderer = UIGraphicsImageRenderer(
+            size: .init(width: 512, height: 512)
+        )
+
+        let image = imageRenderer.image { context in
+            context.cgContext.setFillColor(UIColor.black.cgColor)
+
+            for row in 0..<8 {
+                for col in 0..<8 {
+                    if (row + col).isMultiple(of: 2) {
+                        context.cgContext.fill(
+                            .init(x: col * 64, y: row * 64, width: 64, height: 64)
+                        )
+                    }
+                }
+            }
         }
         
         imageView.image = image
