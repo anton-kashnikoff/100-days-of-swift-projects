@@ -31,6 +31,7 @@ final class ViewController: UIViewController {
         case 2: drawCheckerboard()
         case 3: drawRotatedSquares()
         case 4: drawLines()
+        case 5: drawImagesAndText()
         default: break
         }
     }
@@ -158,6 +159,33 @@ final class ViewController: UIViewController {
             
             context.cgContext.setStrokeColor(UIColor.black.cgColor)
             context.cgContext.strokePath()
+        }
+    }
+    
+    private func drawImagesAndText() {
+        imageView.image = UIGraphicsImageRenderer(
+            size: .init(width: 512, height: 512)
+        )
+        .image { context in
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .center
+            
+            let attributedString = NSAttributedString(
+                string: "The best-laid schemes o'\nmice an' men gang aft agley",
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 36),
+                    .paragraphStyle: paragraphStyle
+                ]
+            )
+            
+            attributedString.draw(
+                with: .init(x: 32, y: 32, width: 448, height: 448),
+                options: .usesLineFragmentOrigin,
+                context: nil
+            )
+
+            UIImage(resource: .mouse)
+                .draw(at: .init(x: 300, y: 150))
         }
     }
 }
