@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
     @IBAction private func redrawTapped() {
         currentDrawType += 1
         
-        if currentDrawType > 6 {
+        if currentDrawType > 7 {
             currentDrawType = .zero
         }
         
@@ -33,6 +33,7 @@ final class ViewController: UIViewController {
         case 4: drawLines()
         case 5: drawImagesAndText()
         case 6: drawEmoji()
+        case 7: drawTwinText()
         default: break
         }
     }
@@ -191,11 +192,10 @@ final class ViewController: UIViewController {
     }
 
     private func drawEmoji() {
-        let imageRenderer = UIGraphicsImageRenderer(
+        imageView.image = UIGraphicsImageRenderer(
             size: .init(width: 512, height: 512)
         )
-
-        let image = imageRenderer.image { context in
+        .image { context in
             UIColor(red: 244 / 255, green: 183 / 255, blue: 70 / 255, alpha: 1).setFill()
             context.cgContext.fillEllipse(
                 in: .init(
@@ -214,11 +214,77 @@ final class ViewController: UIViewController {
             
             UIColor(red: 98 / 255, green: 56 / 255, blue: 18 / 255, alpha: 1).setStroke()
             context.cgContext.setLineWidth(10)
+            context.cgContext.setLineCap(.round)
             context.cgContext.move(to: .init(x: 130, y: 400))
             context.cgContext.addLine(to: .init(x: 512 - 130, y: 350))
             context.cgContext.strokePath()
         }
+    }
+
+    private func drawTwinText() {
+        let imageWidth = 512
+        let imageHeight = 512
+        let renderer = UIGraphicsImageRenderer(size: .init(width: imageWidth, height: imageHeight))
+
+        // those 2 parameters alone determine the text size, and can be changed
+        let height = 150
+        let spacing = 40
+
+        // center text vertically
+        let top: Int = (imageHeight - height) / 2
+        let bottom = top + height
         
-        imageView.image = image
+        // width is proportional to height
+        let width: Int = height * 2 / 3
+        
+        // center text horizontally
+        //                          T                 W             I             N
+        var startx = (imageWidth - (width + spacing + width + spacing + spacing + width)) / 2
+        
+        imageView.image = renderer.image { context in
+            drawT(context: context.cgContext, top: top, bottom: bottom, startx: startx, width: width)
+
+            startx += width + spacing
+            drawW(context: context.cgContext, top: top, bottom: bottom, startx: startx, width: width)
+
+            startx += width + spacing
+            drawI(context: context.cgContext, top: top, bottom: bottom, startx: startx, width: width)
+
+            startx += spacing
+            drawN(context: context.cgContext, top: top, bottom: bottom, startx: startx, width: width)
+
+            UIColor.black.setStroke()
+            context.cgContext.setLineWidth(10)
+            context.cgContext.setLineJoin(.round)
+            context.cgContext.setLineCap(.round)
+            context.cgContext.drawPath(using: .stroke)
+        }
+    }
+
+    private func drawT(context: CGContext, top: Int, bottom: Int, startx: Int, width: Int) {
+        context.move(to: .init(x: startx, y: top))
+        context.addLine(to: .init(x: startx + width, y: top))
+        context.move(to: .init(x: startx + width/2, y: top))
+        context.addLine(to: .init(x: startx + width/2, y: bottom))
+    }
+    
+    private func drawW(context: CGContext, top: Int, bottom: Int, startx: Int, width: Int) {
+        context.move(to: .init(x: startx, y: top))
+        context.addLine(to: .init(x: Double(startx) + Double(width) * 0.3, y: Double(bottom)))
+        context.addLine(to: .init(x: Double(startx) + Double(width) * 0.5, y: Double((top + bottom) / 2)))
+        context.addLine(to: .init(x: Double(startx) + Double(width) * 0.7, y: Double(bottom)))
+        context.addLine(to: .init(x: startx + width, y: top))
+    }
+
+    private func drawI(context: CGContext, top: Int, bottom: Int, startx: Int, width: Int) {
+        context.move(to: .init(x: startx, y: top))
+        context.addLine(to: .init(x: startx, y: bottom))
+    }
+
+    private func drawN(context: CGContext, top: Int, bottom: Int, startx: Int, width: Int) {
+        context.move(to: .init(x: startx, y: bottom))
+        context.addLine(to: .init(x: startx, y: top))
+        context.addLine(to: .init(x: startx + width, y: bottom))
+        context.addLine(to: .init(x: startx + width, y: top))
     }
 }
