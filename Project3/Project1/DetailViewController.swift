@@ -47,17 +47,53 @@ final class DetailViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func shareTapped() {
-        guard let image = imageView.image?.jpegData(compressionQuality: 0.8) else {
+        guard let image = imageView.image else {
             print("No image found")
             return
         }
         
-        let activityViewController = UIActivityViewController(activityItems: [image, selectedImage ?? ""], applicationActivities: [])
+        let activityViewController = UIActivityViewController(
+            activityItems: [
+                watermarked(image: image),
+                selectedImage ?? .init()
+            ],
+            applicationActivities: []
+        )
+        
         if #available(iOS 16.0, *) {
             activityViewController.popoverPresentationController?.sourceItem = navigationItem.rightBarButtonItem
         } else {
             activityViewController.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         }
+        
         present(activityViewController, animated: true)
+    }
+
+    private func watermarked(image: UIImage) -> UIImage {
+        UIGraphicsImageRenderer(size: image.size)
+            .image { context in
+                image.draw(at: .zero)
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.alignment = .left
+                
+                "From Storm Viewer".draw(
+                    with: .init(
+                        x: image.size.width - 332,
+                        y: image.size.height - 82,
+                        width: image.size.width - 32,
+                        height: 50
+                    ),
+                    options: .usesLineFragmentOrigin,
+                    attributes: [
+                        .strokeWidth: -1,
+                        .strokeColor: UIColor.black,
+                        .foregroundColor: UIColor.white,
+                        .font: UIFont(name: "HelveticaNeue", size: 36)!,
+                        .paragraphStyle: paragraphStyle
+                    ],
+                    context: nil
+                )
+            }
     }
 }
