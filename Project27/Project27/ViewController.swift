@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
     @IBAction private func redrawTapped() {
         currentDrawType += 1
         
-        if currentDrawType > 5 {
+        if currentDrawType > 6 {
             currentDrawType = .zero
         }
         
@@ -32,6 +32,7 @@ final class ViewController: UIViewController {
         case 3: drawRotatedSquares()
         case 4: drawLines()
         case 5: drawImagesAndText()
+        case 6: drawEmoji()
         default: break
         }
     }
@@ -187,5 +188,37 @@ final class ViewController: UIViewController {
             UIImage(resource: .mouse)
                 .draw(at: .init(x: 300, y: 150))
         }
+    }
+
+    private func drawEmoji() {
+        let imageRenderer = UIGraphicsImageRenderer(
+            size: .init(width: 512, height: 512)
+        )
+
+        let image = imageRenderer.image { context in
+            UIColor(red: 244 / 255, green: 183 / 255, blue: 70 / 255, alpha: 1).setFill()
+            context.cgContext.fillEllipse(
+                in: .init(
+                    origin: .zero, size: .init(width: 512, height: 512)
+                )
+            )
+            
+            UIColor(red: 98 / 255, green: 56 / 255, blue: 18 / 255, alpha: 1).setFill()
+            context.cgContext.fillEllipse(
+                in: .init(x: 130, y: 150, width: 60, height: 70)
+            )
+            
+            context.cgContext.fillEllipse(
+                in: .init(x: 512 - 60 - 130, y: 150, width: 60, height: 70)
+            )
+            
+            UIColor(red: 98 / 255, green: 56 / 255, blue: 18 / 255, alpha: 1).setStroke()
+            context.cgContext.setLineWidth(10)
+            context.cgContext.move(to: .init(x: 130, y: 400))
+            context.cgContext.addLine(to: .init(x: 512 - 130, y: 350))
+            context.cgContext.strokePath()
+        }
+        
+        imageView.image = image
     }
 }
