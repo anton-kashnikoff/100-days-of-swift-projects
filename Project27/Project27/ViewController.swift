@@ -168,7 +168,7 @@ final class ViewController: UIViewController {
         imageView.image = UIGraphicsImageRenderer(
             size: .init(width: 512, height: 512)
         )
-        .image { context in
+        .image { _ in
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .center
             
