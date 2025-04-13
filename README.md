@@ -52,7 +52,7 @@ Each project in this repository is a standalone application developed as part of
 
 1. Clone the repository:
     ```zsh
-    git clone https://github.com/prostokot14/100-days-of-swift.git
+    git clone https://github.com/anton-kashnikoff/100-days-of-swift.git
     ```
 2. Open the project in Xcode.
 3. Run the application on a simulator or a real device.
