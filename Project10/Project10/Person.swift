@@ -7,7 +7,7 @@
 
 import ObjectiveC
 
-final class Person: NSObject {
+final class Person: NSObject, Codable {
     var name: String
     var image: String
 

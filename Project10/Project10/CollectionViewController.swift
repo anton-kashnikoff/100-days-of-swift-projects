@@ -5,12 +5,23 @@
 //  Created by Антон Кашников on 11.06.2023.
 //
 
-import UIKit
+import LocalAuthentication
 import PhotosUI
+import UIKit
 
 final class CollectionViewController: UICollectionViewController {
     // MARK: - Private Properties
     private var people = [Person]()
+    private var hiddenPeople = [Person]()
+    
+    private var addPersonButton: UIBarButtonItem!
+    private var unlockButton: UIBarButtonItem!
+    
+    private var getDocumentsDirectory: URL {
+        FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)
+            .first!
+    }
 
     // MARK: - UIViewController
     override func viewDidLoad() {
@@ -18,7 +29,25 @@ final class CollectionViewController: UICollectionViewController {
 
         title = "Names to Faces"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+
+        addPersonButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+        unlockButton = UIBarButtonItem(title: "Unlock", style: .plain, target: self, action: #selector(unlockTapped))
+        navigationItem.rightBarButtonItem = unlockButton
+        
+        if let savedPeople = UserDefaults.standard.object(forKey: "people") as? Data {
+            do {
+                hiddenPeople = try JSONDecoder().decode([Person].self, from: savedPeople)
+            } catch {
+                print("Failed to load people")
+            }
+        }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(lock),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
     }
 
     // MARK: - Private Methods
@@ -28,7 +57,7 @@ final class CollectionViewController: UICollectionViewController {
             self?.makeImagePickerController(with: .camera)
         })
         alertController.addAction(UIAlertAction(title: "Photo library", style: .default) { [weak self] _ in
-            if #available(iOS 14.0, *) {
+            if #available(iOS 14, *) {
                 self?.makePickerViewController()
             } else {
                 self?.makeImagePickerController(with: .photoLibrary)
@@ -36,12 +65,63 @@ final class CollectionViewController: UICollectionViewController {
         })
         present(alertController, animated: true)
     }
-
-    private func getDocumentsDirectory() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    
+    @objc
+    private func unlockTapped() {
+        let context = LAContext()
+        var error: NSError?
+        
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            showAlert(title: "Unavailable", message: "Biometrics authentication is not available")
+            return
+        }
+        
+        var reason = String()
+        
+        switch context.biometryType {
+        case .none:
+            showAlert(title: "Unavailable", message: "Biometrics authentication is not available")
+            return
+        case .faceID:
+            reason = "Use Face ID to access your pictures"
+        case .touchID:
+            reason = "Use Touch ID to access your pictures"
+        case .opticID:
+            reason = "Use Optic ID to access your pictures"
+        @unknown default:
+            reason = "Use biometrics to access your pictures"
+        }
+        
+        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { [weak self] success, _ in
+            DispatchQueue.main.async {
+                guard success else {
+                    self?.showAlert(title: "Failed", message: "Biometrics authentication failed")
+                    return
+                }
+                
+                self?.unlock()
+            }
+        }
+    }
+    
+    @objc
+    private func lock() {
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = unlockButton
+        
+        people.removeAll()
+        collectionView.reloadData()
+    }
+    
+    private func unlock() {
+        navigationItem.leftBarButtonItem = addPersonButton
+        navigationItem.rightBarButtonItem = nil
+        
+        people = hiddenPeople
+        collectionView.reloadData()
     }
 
-    @available(iOS 14.0, *)
+    @available(iOS 14, *)
     private func makePickerViewController() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
@@ -64,12 +144,11 @@ final class CollectionViewController: UICollectionViewController {
 
     private func saveImage(_ image: UIImage) {
         let imageName = UUID().uuidString
-        let imagePath: URL
 
-        if #available(iOS 16.0, *) {
-            imagePath = getDocumentsDirectory().appending(path: imageName)
+        let imagePath = if #available(iOS 16, *) {
+            getDocumentsDirectory.appending(path: imageName)
         } else {
-            imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
+            getDocumentsDirectory.appendingPathComponent(imageName)
         }
 
         if let jpegData = image.jpegData(compressionQuality: 1) {
@@ -78,6 +157,9 @@ final class CollectionViewController: UICollectionViewController {
 
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
+        
+        savePeople()
+        
         collectionView.reloadData()
     }
 
@@ -100,6 +182,20 @@ final class CollectionViewController: UICollectionViewController {
         }
         return UIImage(cgImage: croppedCGImage)
     }
+    
+    private func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true)
+    }
+    
+    private func savePeople() {
+        if let savedData = try? JSONEncoder().encode(people) {
+            UserDefaults.standard.set(savedData, forKey: "people")
+        } else {
+            print("Failed to save people")
+        }
+    }
 }
 
 // MARK: - UICollectionViewController
@@ -116,11 +212,10 @@ extension CollectionViewController {
         let person = people[indexPath.item]
         cell.nameLabel.text = person.name
 
-        let imagePath: URL
-        if #available(iOS 16.0, *) {
-            imagePath = getDocumentsDirectory().appending(path: person.image)
+        let imagePath = if #available(iOS 16, *) {
+            getDocumentsDirectory.appending(path: person.image)
         } else {
-            imagePath = getDocumentsDirectory().appendingPathComponent(person.image)
+            getDocumentsDirectory.appendingPathComponent(person.image)
         }
 
         cell.imageView.image = UIImage(contentsOfFile: imagePath.path)
@@ -140,12 +235,19 @@ extension CollectionViewController {
             let renameAlertController = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
             renameAlertController.addTextField()
             renameAlertController.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak renameAlertController] _ in
-                guard let newName = renameAlertController?.textFields?[0].text else {
+                guard let newName = renameAlertController?.textFields?.first?.text else {
                     return
                 }
 
                 person.name = newName
-                self?.collectionView.reloadData()
+                
+                DispatchQueue.global().async {
+                    self?.savePeople()
+
+                    DispatchQueue.main.async {
+                        self?.collectionView.reloadData()
+                    }
+                }
             })
             renameAlertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
@@ -172,7 +274,7 @@ extension CollectionViewController: UIImagePickerControllerDelegate, UINavigatio
 }
 
 // MARK: - PHPickerViewControllerDelegate
-@available(iOS 14.0, *)
+@available(iOS 14, *)
 extension CollectionViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
