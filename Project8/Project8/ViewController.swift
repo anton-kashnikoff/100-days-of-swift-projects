@@ -19,10 +19,20 @@ final class ViewController: UIViewController {
     private var activatedButtons = [UIButton]()
     private var solutions = [String]()
     private var level = 1
-    private var score = 0 {
+    private var score = Int() {
         didSet {
             scoreLabel.text = "Score: \(score)"
         }
+    }
+    
+    private var isAllButtonsPressed: Bool {
+        for activatedButton in letterButtons {
+            if !activatedButton.isHidden {
+                return false
+            }
+        }
+
+        return true
     }
 
     // MARK: - UIViewController
@@ -38,7 +48,7 @@ final class ViewController: UIViewController {
 
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
-        cluesLabel.font = UIFont.systemFont(ofSize: 24)
+        cluesLabel.font = .systemFont(ofSize: 24)
         cluesLabel.text = "CLUES"
         cluesLabel.numberOfLines = 0
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
@@ -46,7 +56,7 @@ final class ViewController: UIViewController {
 
         answersLabel = UILabel()
         answersLabel.translatesAutoresizingMaskIntoConstraints = false
-        answersLabel.font = UIFont.systemFont(ofSize: 24)
+        answersLabel.font = .systemFont(ofSize: 24)
         answersLabel.text = "ANSWERS"
         answersLabel.numberOfLines = 0
         answersLabel.textAlignment = .right
@@ -57,7 +67,7 @@ final class ViewController: UIViewController {
         currentAnswerLabel.translatesAutoresizingMaskIntoConstraints = false
         currentAnswerLabel.placeholder = "Tap letters to guess"
         currentAnswerLabel.textAlignment = .center
-        currentAnswerLabel.font = UIFont.systemFont(ofSize: 44)
+        currentAnswerLabel.font = .systemFont(ofSize: 44)
         currentAnswerLabel.isUserInteractionEnabled = false
         view.addSubview(currentAnswerLabel)
 
@@ -68,8 +78,8 @@ final class ViewController: UIViewController {
         submitButton.layer.borderColor = UIColor.lightGray.cgColor
         submitButton.layer.cornerRadius = 10
 
-        if #available(iOS 15.0, *) {
-            submitButton.configuration = UIButton.Configuration.plain()
+        if #available(iOS 15, *) {
+            submitButton.configuration = .plain()
             submitButton.configuration?.contentInsets.leading = 15
             submitButton.configuration?.contentInsets.trailing = 15
         } else {
@@ -86,8 +96,8 @@ final class ViewController: UIViewController {
         clearButton.layer.borderColor = UIColor.lightGray.cgColor
         clearButton.layer.cornerRadius = 10
 
-        if #available(iOS 15.0, *) {
-            clearButton.configuration = UIButton.Configuration.plain()
+        if #available(iOS 15, *) {
+            clearButton.configuration = .plain()
             clearButton.configuration?.contentInsets.leading = 15
             clearButton.configuration?.contentInsets.trailing = 15
         } else {
@@ -134,7 +144,7 @@ final class ViewController: UIViewController {
             for column in 0..<5 {
                 let letterButton = UIButton(type: .custom)
                 letterButton.setTitleColor(view.tintColor, for: .normal)
-                letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
+                letterButton.titleLabel?.font = .systemFont(ofSize: 36)
                 letterButton.setTitle("WWW", for: .normal)
                 letterButton.frame = CGRect(x: column * letterButtonWidth, y: row * letterButtonHeight, width: letterButtonWidth, height: letterButtonHeight)
                 letterButton.addTarget(self, action: #selector(letterButtonTapped), for: .touchUpInside)
@@ -168,18 +178,8 @@ final class ViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: actionHandler))
         present(alertController, animated: true)
     }
-
-    private func isAllButtonsPressed() -> Bool {
-        for activatedButton in activatedButtons {
-            if !activatedButton.isHidden {
-                return false
-            }
-        }
-
-        return true
-    }
     
-    private func makeButtonsActive(_ bool: Bool) {
+    private func makeButtonsActive(_ bool: Bool = true) {
         for button in letterButtons {
             button.isEnabled = bool
         }
@@ -240,7 +240,7 @@ final class ViewController: UIViewController {
             currentAnswerLabel.text = ""
             score += 1
 
-            if isAllButtonsPressed() {
+            if isAllButtonsPressed {
                 showAlert(title: "Well done!", message: "Are you ready for the next level?", actionHandler: levelUp(alertAction:))
             }
         } else {
@@ -272,7 +272,7 @@ final class ViewController: UIViewController {
             UIView.animate(withDuration: 1, animations: {
                 activatedButton.alpha = 1
             }) { _ in
-                self.makeButtonsActive(true)
+                self.makeButtonsActive()
             }
         }
 
@@ -294,7 +294,7 @@ final class ViewController: UIViewController {
             sender.alpha = 0
         }) { _ in
             sender.isHidden = true
-            self.makeButtonsActive(true)
+            self.makeButtonsActive()
         }
     }
 }
