@@ -47,6 +47,7 @@ Each project in this repository is a standalone application developed as part of
 - **Project 27: Core Graphics**: A Core Graphics sandbox – a button you can type will trigger Core Graphics drawing in different ways.
 - **Milestone projects 25-27: Meme generator**: A meme generation app.
 - **Project 28: Secret Swift**: A secure text editor. Users can type whatever they want and have it saved, but to read it again they'll need to unlock the app using Touch ID or Face ID.
+- **Project 29: Exploding Monkeys**: The game called Gorillas, and it first shipped with an old text-based operating system called MS-DOS 5.0 way back in 1991.
 
 ## How to Use
 
