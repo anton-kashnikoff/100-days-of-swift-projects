@@ -14,7 +14,7 @@
 		CBAF967D2E09C1D60088B09C /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				App/Info.plist,
 			);
 			target = CBAF966A2E09C1D50088B09C /* MilestoneProjects28-30 */;
 		};

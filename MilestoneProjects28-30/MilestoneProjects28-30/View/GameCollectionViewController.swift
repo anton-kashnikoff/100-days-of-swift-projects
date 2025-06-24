@@ -38,6 +38,13 @@ final class GameCollectionViewController: UICollectionViewController {
             target: self,
             action: #selector(newGame)
         )
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Settings",
+            style: .plain,
+            target: self,
+            action: #selector(settingsTapped)
+        )
 
         let (gridSide1, gridSide2) = grids[currentGrid].combinations[currentGridElement]
         
@@ -103,12 +110,17 @@ final class GameCollectionViewController: UICollectionViewController {
 
         if flippedCards.isEmpty {
             flipAnimator.flipTo(state: .front, cell: cell)
-            flippedCards.append((position: indexPath.row, card: cards[indexPath.row]))
+            flippedCards.append(
+                (position: indexPath.row, card: cards[indexPath.row])
+            )
+            
             return
         }
 
         if flippedCards.count == 1 {
-            flippedCards.append((position: indexPath.row, card: cards[indexPath.row]))
+            flippedCards.append(
+                (position: indexPath.row, card: cards[indexPath.row])
+            )
 
             if flippedCards[0].card.frontImage == flippedCards[1].card.frontImage {
                 matchCards()
@@ -129,7 +141,10 @@ final class GameCollectionViewController: UICollectionViewController {
             // another card
             forceFinishUnmatchCards()
             flipAnimator.flipTo(state: .front, cell: cell)
-            flippedCards.append((position: indexPath.row, card: cards[indexPath.row]))
+            flippedCards.append(
+                (position: indexPath.row, card: cards[indexPath.row])
+            )
+            
             return
         }
     }
@@ -155,6 +170,28 @@ final class GameCollectionViewController: UICollectionViewController {
         
         currentCardSizeValid = false
         collectionView.reloadData()
+    }
+    
+    @objc
+    private func settingsTapped() {
+        if let settingsViewController = UIStoryboard(
+            name: "Settings",
+            bundle: .main
+        ).instantiateViewController(
+            withIdentifier: "SettingsViewController"
+        ) as? SettingsViewController {
+            settingsViewController.setParameters(
+                currentCards: currentCards,
+                currentGrid: currentGrid,
+                currentGridElement: currentGridElement
+            )
+            
+            settingsViewController.delegate = self
+            navigationController?.pushViewController(
+                settingsViewController,
+                animated: true
+            )
+        }
     }
     
     private func resetFlippedCards() {
@@ -317,6 +354,28 @@ extension GameCollectionViewController: UICollectionViewDelegateFlowLayout {
         currentCardSize = cardSize.getCardSize(collectionView: collectionView)
         currentCardSizeValid = true
         return currentCardSize
+    }
+}
+
+// MARK: - SettingsDelegate
+
+extension GameCollectionViewController: SettingsDelegate {
+    func settings(
+        _ settings: SettingsViewController,
+        didUpdateCards cards: String
+    ) {
+        currentCards = cards
+        newGame()
+    }
+
+    func settings(
+        _ settings: SettingsViewController,
+        didUpdateGrid grid: Int,
+        didUpdateGridElement gridElement: Int
+    ) {
+        currentGrid = grid
+        currentGridElement = gridElement
+        newGame()
     }
 }
 
