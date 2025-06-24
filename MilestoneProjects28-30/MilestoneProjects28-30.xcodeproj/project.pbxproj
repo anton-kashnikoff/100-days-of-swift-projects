@@ -14,7 +14,7 @@
 		CB397F972E0B00980042DFBC /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				App/Info.plist,
 			);
 			target = CBAF966A2E09C1D50088B09C /* MilestoneProjects28-30 */;
 		};
@@ -147,7 +147,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BBQWCP2Q36;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "MilestoneProjects28-30/Info.plist";
+				INFOPLIST_FILE = "MilestoneProjects28-30/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -180,7 +180,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = BBQWCP2Q36;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "MilestoneProjects28-30/Info.plist";
+				INFOPLIST_FILE = "MilestoneProjects28-30/App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
