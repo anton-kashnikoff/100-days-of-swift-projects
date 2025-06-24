@@ -11,10 +11,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CBAF967D2E09C1D60088B09C /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */ = {
+		CB397F972E0B00980042DFBC /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				App/Info.plist,
+				Info.plist,
 			);
 			target = CBAF966A2E09C1D50088B09C /* MilestoneProjects28-30 */;
 		};
@@ -24,7 +24,7 @@
 		CBAF966D2E09C1D50088B09C /* MilestoneProjects28-30 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CBAF967D2E09C1D60088B09C /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */,
+				CB397F972E0B00980042DFBC /* Exceptions for "MilestoneProjects28-30" folder in "MilestoneProjects28-30" target */,
 			);
 			path = "MilestoneProjects28-30";
 			sourceTree = "<group>";
